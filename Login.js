@@ -2,11 +2,15 @@
 const Session = require('./Session');
 //Imports CryptoJS library to access MD5 for hashing passwords
 let MD5 = require("crypto-js/md5");
+
 let username = "";
 let password = "";
 let hashPassword = "";
 let userRole = "";
 let loginSuccess = false;
+
+//Credential data array
+let credentials = [["user1", "7c6a180b36896a0a8c02787eeafb0e4c", "veterinarian"], ["user2", "6cb75f652a9b52798eb6cf2201057c73", "conservation zoologist"], ["user3", "819b0643d6b89dc9b579fdfc9094f28e", "director"]];
 
 //Prompts user for username and password, then hashes password before beginning the validation process
 module.exports = {
@@ -31,20 +35,11 @@ module.exports = {
     }
  }
 
-//Checks user input with credentials file to see if there is a match
+//Checks user input with credentials array to see if there is a match
 function compareCredentials() {
-    const readline = require('readline-sync');
-    let fs = require('fs');
-    let lines = fs.readFileSync('credentials.txt');
-    let correctLine = "";
-
-    lines = lines.toString().split(/[\n]/);
-
-    for (let i = 0; i < lines.length; i++) {
-        if (lines[i].startsWith(username) && lines[i].includes(hashPassword)) {
-            correctLine = lines[i];
-            let index = correctLine.indexOf( ' ', correctLine.indexOf( ' ' ) + 1 );
-            userRole = correctLine.substr( index + 1 );
+    for (let i = 0; i < credentials.length; i++) {
+        if (credentials[i][0] == username && credentials[i][1] == (hashPassword)) {
+            userRole = credentials[i][2];
             loginSuccess = true;
             success(loginSuccess);
         }
